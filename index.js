@@ -30,16 +30,18 @@ app.use(compression());
 app.use(cors());
 app.use(bodyParser.json());
 
-// MongoDB connection
-mongoose.connect("mongodb+srv://bringa609:iW3bdAzeOggOBoGM@cluster0.338ii.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+mongoose.connect("mongodb+srv://bringa609:iW3bdAzeOggOBoGM@cluster0.338ii.mongodb.net/test", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+})
   .then(() => {
     console.log("Connected to MongoDB");
+
     app.listen(port, () => {
       console.log(`Server running at http://localhost:${port}/`);
     });
   })
   .catch((err) => console.error("MongoDB connection error:", err));
-
 // Basic route
 app.get("/", (req, res) => {
   res.send("Hello World!");
