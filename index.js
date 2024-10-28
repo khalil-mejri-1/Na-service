@@ -21,7 +21,7 @@ const TailleDesVignes = require("./models/Taille_des_vignes");
 const Panier = require("./models/panier");
 
 const app = express();
-const port = 3000;
+const port = 3000||process.env.PORT;
 
 const compression=require("compression");
 app.use(compression());
