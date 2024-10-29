@@ -27,21 +27,25 @@ const compression=require("compression");
 app.use(compression());
 
 // Middleware
-app.use(cors());
+app.use(cors({
+  origin: '*', // هذا سيسمح بجميع النطاقات
+  methods: ['GET', 'POST', 'PUT', 'DELETE'],
+  credentials: true,
+}));
+
+
 app.use(bodyParser.json());
 
-mongoose.connect("mongodb+srv://bringa609:iW3bdAzeOggOBoGM@cluster0.338ii.mongodb.net/test", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-})
+// MongoDB connection
+mongoose.connect("mongodb+srv://bringa609:iW3bdAzeOggOBoGM@cluster0.338ii.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
   .then(() => {
     console.log("Connected to MongoDB");
-
     app.listen(port, () => {
       console.log(`Server running at http://localhost:${port}/`);
     });
   })
   .catch((err) => console.error("MongoDB connection error:", err));
+
 // Basic route
 app.get("/", (req, res) => {
   res.send("Hello World!");
