@@ -11,6 +11,6 @@ const PrestationsAvicolesSchema = new mongoose.Schema({
  
 });
 
-const PrestationsAvicoles = mongoose.model("PrestationsAvicoles", PrestationsAvicolesSchema);
+const PrestationsAvicoles = mongoose.model("PrestationsAvicole", PrestationsAvicolesSchema);
 
 module.exports = PrestationsAvicoles;

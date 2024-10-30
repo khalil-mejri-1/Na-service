@@ -20,6 +20,7 @@ const TravauxMécaniques = require("./models/Travaux_mécaniques");
 const TailleDesVignes = require("./models/Taille_des_vignes");
 const Panier = require("./models/panier");
 
+const Contact=require("./models/contact")
 const app = express();
 const port = 3000||process.env.PORT;
 
@@ -45,6 +46,16 @@ mongoose.connect("mongodb+srv://bringa609:iW3bdAzeOggOBoGM@cluster0.338ii.mongod
     });
   })
   .catch((err) => console.error("MongoDB connection error:", err));
+
+
+
+
+
+
+  // مسار لحذف صور
+
+
+
 
 // Basic route
 app.get("/", (req, res) => {
@@ -149,6 +160,40 @@ app.post('/produits', upload.single('img'), (req, res) => {
     });
 });
 
+
+
+
+app.post('/contact', (req, res) => {
+  const { nom, email,tlf,msg } = req.body;
+
+  const newContact = new Contact({
+    nom,
+    email,
+    tlf,
+    msg
+    
+  });
+
+  newContact.save()
+    .then(() => res.status(201).send("contact  send"))
+    .catch((err) => {
+      console.error("Error saving msg:", err);
+      res.status(500).send("An error occurred while saving the msg: " + err.message);
+    });
+});
+
+// Fetch all products
+app.get("/contact", (req, res) => {
+  Contact.find()
+    .then(contact => res.status(200).json(contact))
+    .catch(err => {
+      console.error("Error fetching produits:", err);
+      res.status(500).send("Error fetching produits: " + err.message);
+    });
+});
+
+
+
 // Endpoint to save product IDs
 app.post('/panier', async (req, res) => {
   try {
@@ -203,20 +248,216 @@ app.get("/panier/produits", async (req, res) => {
 
 
 // نقطة النهاية لحذف المنتج
-app.delete('/produits/:id', async (req, res) => {
-  const { id } = req.params;
-  
+// نقطة النهاية لحذف المنتج
+app.delete('/panier/produits/:personId', async (req, res) => {
+  const { personId } = req.params; // استخدم req.params.id بدلاً من personId
+
   try {
-    const deletedProduct = await Produit.findByIdAndDelete(id);
-    if (!deletedProduct) {
-      return res.status(404).json({ message: 'Produit non trouvé' });
+    const deletedCommand = await Panier.findByIdAndDelete(personId); // استخدم id هنا
+    if (!deletedCommand) {
+      return res.status(404).json({ message: 'Commande non trouvée' });
     }
-    res.status(200).json({ message: 'Produit supprimé avec succès' });
+    res.status(200).json({ message: 'Commande supprimée avec succès' });
   } catch (error) {
-    console.error('Erreur lors de la suppression du produit:', error);
+    console.error('Erreur lors de la suppression de la commande:', error);
     res.status(500).json({ message: 'Erreur interne du serveur' });
   }
 });
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+// نقطة النهاية لحذف المنتج
+app.delete('/ramassage-de-volailles/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const deletedimg = await RamassageDeVolailles.findByIdAndDelete(id);
+    if (!deletedimg) {
+      return res.status(404).json({ message: 'image non trouvé' });
+    }
+    res.status(200).json({ message: 'photo supprimé avec succès' });
+  } catch (error) {
+    console.error('Erreur lors de la suppression du photo:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur' });
+  }
+});
+
+app.delete('/prestations-avicoles/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const deletedimg = await PrestationsAvicoles.findByIdAndDelete(id);
+    if (!deletedimg) {
+      return res.status(404).json({ message: 'image non trouvé' });
+    }
+    res.status(200).json({ message: 'photo supprimé avec succès' });
+  } catch (error) {
+    console.error('Erreur lors de la suppression du photo:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur' });
+  }
+});
+
+
+app.delete('/prestations-viticoles/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const deletedimg = await PrestationsViticoles.findByIdAndDelete(id);
+    if (!deletedimg) {
+      return res.status(404).json({ message: 'image non trouvé' });
+    }
+    res.status(200).json({ message: 'photo supprimé avec succès' });
+  } catch (error) {
+    console.error('Erreur lors de la suppression du photo:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur' });
+  }
+});
+
+
+
+
+// نقطة النهاية لحذف المنتج
+app.delete('/deratisation-desinsectisation/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const deletedimg = await DératisationDésinsectisation.findByIdAndDelete(id);
+    if (!deletedimg) {
+      return res.status(404).json({ message: 'image non trouvé' });
+    }
+    res.status(200).json({ message: 'photo supprimé avec succès' });
+  } catch (error) {
+    console.error('Erreur lors de la suppression du photo:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur' });
+  }
+});
+
+app.delete('/nettoyage-et-desinfection/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const deletedimg = await NettoyageEtDésinfection.findByIdAndDelete(id);
+    if (!deletedimg) {
+      return res.status(404).json({ message: 'image non trouvé' });
+    }
+    res.status(200).json({ message: 'photo supprimé avec succès' });
+  } catch (error) {
+    console.error('Erreur lors de la suppression du photo:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur' });
+  }
+});
+
+
+app.delete('/travaux-manuels/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const deletedimg = await TravauxManuels.findByIdAndDelete(id);
+    if (!deletedimg) {
+      return res.status(404).json({ message: 'image non trouvé' });
+    }
+    res.status(200).json({ message: 'photo supprimé avec succès' });
+  } catch (error) {
+    console.error('Erreur lors de la suppression du photo:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur' });
+  }
+});
+
+
+
+
+// نقطة النهاية لحذف المنتج
+app.delete('/vaccination-de-volailles/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const deletedimg = await VaccinationDeVolailles.findByIdAndDelete(id);
+    if (!deletedimg) {
+      return res.status(404).json({ message: 'image non trouvé' });
+    }
+    res.status(200).json({ message: 'photo supprimé avec succès' });
+  } catch (error) {
+    console.error('Erreur lors de la suppression du photo:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur' });
+  }
+});
+
+app.delete('/vendanges/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const deletedimg = await Vendanges.findByIdAndDelete(id);
+    if (!deletedimg) {
+      return res.status(404).json({ message: 'image non trouvé' });
+    }
+    res.status(200).json({ message: 'photo supprimé avec succès' });
+  } catch (error) {
+    console.error('Erreur lors de la suppression du photo:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur' });
+  }
+});
+
+
+app.delete('/travaux-mecaniques/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const deletedimg = await TravauxMécaniques.findByIdAndDelete(id);
+    if (!deletedimg) {
+      return res.status(404).json({ message: 'image non trouvé' });
+    }
+    res.status(200).json({ message: 'photo supprimé avec succès' });
+  } catch (error) {
+    console.error('Erreur lors de la suppression du photo:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur' });
+  }
+});
+
+
+app.delete('/taille-des-vignes/:id', async (req, res) => {
+  const { id } = req.params;
+  
+  try {
+    const deletedimg = await TailleDesVignes.findByIdAndDelete(id);
+    if (!deletedimg) {
+      return res.status(404).json({ message: 'image non trouvé' });
+    }
+    res.status(200).json({ message: 'photo supprimé avec succès' });
+  } catch (error) {
+    console.error('Erreur lors de la suppression du photo:', error);
+    res.status(500).json({ message: 'Erreur interne du serveur' });
+  }
+});
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Fetch person details including email and phone based on personId
 app.get('/person/:personId', async (req, res) => {
@@ -290,6 +531,17 @@ app.get("/users", (req, res) => {
       res.status(500).send("Error fetching users: " + err.message);
     });
 });
+
+// Fetch all users
+app.get("/panier", (req, res) => {
+  Panier.find()
+    .then(users => res.status(200).json(users))
+    .catch(err => {
+      console.error("Error fetching users:", err);
+      res.status(500).send("Error fetching users: " + err.message);
+    });
+});
+
 
 // نقطة النهاية لحذف الطلب
 // نقطة النهاية لحذف الطلب
@@ -410,3 +662,5 @@ app.use((err, req, res, next) => {
   console.error(err.stack);
   res.status(500).send('Something broke!');
 });
+
+
